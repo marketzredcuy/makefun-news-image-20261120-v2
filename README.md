@@ -11,7 +11,8 @@ Friday 20 November 2026: **35 stories, 7 regions, one day**.
 `$MAKEFUN_OUTPUT_DIR/entry.png` and verifies size, format and
 dimensions (at most 1 MiB and 1024x1024, and square), and that the
 copy is byte-for-byte identical to the bundled image. The bundled
-image is a 1024x1024 PNG, 319,055 bytes.
+image is a 1024x1024 PNG, 319,055 bytes, sha256
+`3b1d4820459fafaa9572867663f8d0c7e3f58974ce804a03cc9416356693f9bc`.
 
 ## Why v2
 
@@ -50,6 +51,19 @@ big map with numbered dots, a readable ALSO list, and a DATE CHECK
 bar. Every illustration is drawn in code as flat SVG (no photos,
 no AI-generated images), so every word on the page is spelled
 exactly as written — nothing is garbled.
+
+## Verify
+
+Run the entrypoint twice into two directories and compare digests
+— both runs must write the same bytes:
+
+```sh
+MAKEFUN_OUTPUT_DIR=/tmp/out1 python3 main.py
+MAKEFUN_OUTPUT_DIR=/tmp/out2 python3 main.py
+sha256sum /tmp/out1/entry.png /tmp/out2/entry.png entry.png
+```
+
+All three digests are `3b1d4820459fafaa9572867663f8d0c7e3f58974ce804a03cc9416356693f9bc`.
 
 ## Sources
 

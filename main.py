@@ -63,12 +63,19 @@ def main() -> int:
             f"entry.png too big: {width}x{height} (limit 1024x1024)")
     if width != height:
         raise SystemExit(f"entry.png is not square: {width}x{height}")
+    # The bundled image is composed at exactly 1024x1024. Anything
+    # else means the bundled image was replaced, so refuse it rather
+    # than submit a wrong-sized page.
+    if width != MAX_SIDE or height != MAX_SIDE:
+        raise SystemExit(
+            f"entry.png is {width}x{height}, expected 1024x1024")
     # The bundled image is the whole entry: a zero-byte or truncated
     # copy would pass the size checks, so refuse anything implausibly
     # small as well as anything over the limit.
     if size < 100_000:
         raise SystemExit(f"entry.png implausibly small: {size} bytes")
-    print(f"wrote {dst} ({size} bytes, {width}x{height})")
+    print(f"wrote {dst} ({size} bytes, {width}x{height}, "
+          f"sha256 {sha256_file(dst)[:16]}...)")
     return 0
 
 
